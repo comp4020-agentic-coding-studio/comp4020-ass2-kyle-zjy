@@ -1,0 +1,85 @@
+---
+// A "notice your own perception" activity: pick one of a few short options,
+// then read what was actually going on. There is no scored right answer —
+// the reveal is the same regardless of which option is picked, because the
+// point is the noticing, not the guessing.
+interface Props {
+  prompt: string;
+  options: string[];
+  reveal: string;
+}
+
+const { prompt, options, reveal } = Astro.props;
+---
+
+<div class="perception-check" data-perception-check>
+  <p class="pc-prompt">{prompt}</p>
+  <div class="pc-options" role="group" aria-label="Choose one, then read what was going on">
+    {
+      options.map((option) => (
+        <button type="button" class="pc-option" aria-pressed="false">
+          {option}
+        </button>
+      ))
+    }
+  </div>
+  <p class="pc-reveal" hidden>{reveal}</p>
+</div>
+
+<style>
+  .perception-check {
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+    padding: var(--at-spacing-lg);
+    margin-block: 2rem;
+    background: var(--at-bg-alt);
+  }
+
+  .pc-prompt {
+    font-weight: 600;
+    margin-block-start: 0;
+  }
+
+  .pc-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-block-end: 1rem;
+  }
+
+  .pc-option {
+    font: inherit;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--at-border);
+    border-radius: 999px;
+    background: var(--at-bg);
+    color: var(--at-text);
+    cursor: pointer;
+  }
+
+  .pc-option[aria-pressed="true"] {
+    background: var(--at-primary);
+    border-color: var(--at-primary);
+    color: var(--at-on-primary);
+  }
+
+  .pc-reveal {
+    margin-block-end: 0;
+    padding-block-start: var(--at-spacing-md);
+    border-block-start: 1px dashed var(--at-border);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-perception-check]").forEach((container) => {
+    const buttons = container.querySelectorAll<HTMLButtonElement>(".pc-option");
+    const reveal = container.querySelector<HTMLParagraphElement>(".pc-reveal");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+        if (reveal) reveal.hidden = false;
+      });
+    });
+  });
+</script>

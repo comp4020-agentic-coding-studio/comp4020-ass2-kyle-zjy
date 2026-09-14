@@ -4,6 +4,10 @@ import { getPublishedCollection } from "astro-course-university/content";
 import RelatedContent from "astro-course-university/components/RelatedContent.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import { withBase } from "astro-theme-university/url";
+import CaseStamp from "../../components/CaseStamp.astro";
+import InterpretChoice from "../../components/InterpretChoice.astro";
+import OracleGenerator from "../../components/OracleGenerator.astro";
+import PerceptionCheck from "../../components/PerceptionCheck.astro";
 import TeachingTeam from "../../components/TeachingTeam.astro";
 import { formatCourseDate } from "../../lib/dates";
 import { graphCollections, siteConfig } from "../../site-config";
@@ -16,12 +20,63 @@ export async function getStaticPaths() {
 const { lecture } = Astro.props;
 const { Content } = await render(lecture);
 const title = `Week ${lecture.data.week}: ${lecture.data.title}`;
+
+// `activity` rides the schema's `.loose()` passthrough, so its kind-specific
+// fields aren't in the generated type and need a cast at the rendering
+// boundary — the same pattern the people route already uses for `photoAlt`.
+type Activity =
+  | { kind: "perception"; prompt: string; options: string[]; reveal: string }
+  | { kind: "interpret"; prompt: string; choices: { label: string; response: string }[] }
+  | { kind: "oracle"; prompt: string; actionLabel?: string; outputs: string[]; mechanism: string };
+const activity = lecture.data.activity as Activity | undefined;
 ---
 
 <ContentLayout title={title} description={lecture.data.description} {...siteConfig}>
-  <p><strong>{formatCourseDate(lecture.data.date)}</strong></p>
+  <p class="lecture-meta">
+    <strong>{formatCourseDate(lecture.data.date)}</strong>
+    <CaseStamp n={lecture.data.week} />
+  </p>
   {lecture.data.slides && <p><a href={withBase(lecture.data.slides)}>Open the slides</a></p>}
+  <p class="lecture-question">{lecture.data.question}</p>
   <Content />
+  {
+    activity?.kind === "perception" && (
+      <PerceptionCheck prompt={activity.prompt} options={activity.options} reveal={activity.reveal} />
+    )
+  }
+  {
+    activity?.kind === "interpret" && (
+      <InterpretChoice prompt={activity.prompt} choices={activity.choices} />
+    )
+  }
+  {
+    activity?.kind === "oracle" && (
+      <OracleGenerator
+        prompt={activity.prompt}
+        actionLabel={activity.actionLabel}
+        outputs={activity.outputs}
+        mechanism={activity.mechanism}
+      />
+    )
+  }
   <TeachingTeam teachers={lecture.data.teachers} />
   <RelatedContent entry={lecture} collections={graphCollections} />
 </ContentLayout>
+
+<style>
+  .lecture-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .lecture-question {
+    font-size: var(--at-font-size-h4);
+    font-style: italic;
+    color: var(--at-heading);
+    border-inline-start: 3px solid var(--at-heading);
+    padding-inline-start: var(--at-spacing-md);
+    margin-block: 1.5rem;
+  }
+</style>

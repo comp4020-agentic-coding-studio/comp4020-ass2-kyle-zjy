@@ -1,0 +1,44 @@
+---
+// A small archival marginalia motif. The course's fixed provisioning suffix
+// (courseMeta.code's last three digits) becomes a running "case file" number
+// rather than an arbitrary identifier nobody explains — see /pattern-archive/
+// for the full story of why.
+import { courseMeta } from "../course-config";
+
+interface Props {
+  n: number | string;
+  label?: string;
+}
+
+const { n, label = "Case file" } = Astro.props;
+const suffix = courseMeta.code.slice(-3);
+const number = typeof n === "number" ? String(n).padStart(2, "0") : n;
+---
+
+<span class="case-stamp">
+  <span class="cs-label">{label}</span>
+  <span class="cs-number">{suffix}-{number}</span>
+</span>
+
+<style>
+  .case-stamp {
+    display: inline-flex;
+    gap: 0.4em;
+    align-items: baseline;
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--at-text-secondary);
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+    padding: 0.15rem 0.55rem;
+    transform: rotate(-1.2deg);
+    white-space: nowrap;
+  }
+
+  .cs-number {
+    color: var(--at-heading);
+    font-weight: 600;
+  }
+</style>

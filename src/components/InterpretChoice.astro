@@ -1,0 +1,90 @@
+---
+// An "interpret the same fact several ways" activity: one scenario, several
+// competing readings of it. Clicking a reading shows its commentary; readings
+// can be revisited in any order so the point is comparison, not a single
+// correct decoding.
+interface Props {
+  prompt: string;
+  choices: { label: string; response: string }[];
+}
+
+const { prompt, choices } = Astro.props;
+---
+
+<div class="interpret-choice" data-interpret-choice>
+  <p class="ic-prompt">{prompt}</p>
+  <div class="ic-choices">
+    {
+      choices.map((choice, index) => (
+        <div class="ic-choice">
+          <button type="button" class="ic-button" data-index={index} aria-expanded="false">
+            {choice.label}
+          </button>
+          <p class="ic-response" data-index={index} hidden>
+            {choice.response}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .interpret-choice {
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+    padding: var(--at-spacing-lg);
+    margin-block: 2rem;
+    background: var(--at-bg-alt);
+  }
+
+  .ic-prompt {
+    font-weight: 600;
+    margin-block-start: 0;
+  }
+
+  .ic-choices {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .ic-button {
+    font: inherit;
+    text-align: start;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+    background: var(--at-bg);
+    color: var(--at-text);
+    cursor: pointer;
+  }
+
+  .ic-button[aria-expanded="true"] {
+    border-color: var(--at-primary);
+    color: var(--at-heading);
+  }
+
+  .ic-response {
+    margin: 0.4rem 0 0;
+    padding-inline-start: var(--at-spacing-md);
+    border-inline-start: 3px solid var(--at-primary);
+    color: var(--at-text-secondary);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-interpret-choice]").forEach((container) => {
+    const buttons = container.querySelectorAll<HTMLButtonElement>(".ic-button");
+    const responses = container.querySelectorAll<HTMLParagraphElement>(".ic-response");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const index = button.dataset.index;
+        buttons.forEach((b) => b.setAttribute("aria-expanded", String(b === button)));
+        responses.forEach((p) => {
+          p.hidden = p.dataset.index !== index;
+        });
+      });
+    });
+  });
+</script>

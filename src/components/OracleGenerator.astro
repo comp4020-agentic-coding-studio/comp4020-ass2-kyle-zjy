@@ -1,0 +1,84 @@
+---
+// A tiny, honest "oracle": a button that returns one line from a fixed pool
+// at random, plus a native <details> disclosure explaining the mechanism in
+// plain terms. It never claims to be anything other than what it is —
+// showing the trick is the point of the activity, not a spoiler of it.
+interface Props {
+  prompt: string;
+  actionLabel?: string;
+  outputs: string[];
+  mechanism: string;
+}
+
+const { prompt, actionLabel = "Consult it", outputs, mechanism } = Astro.props;
+---
+
+<div class="oracle-generator" data-oracle-generator data-outputs={JSON.stringify(outputs)}>
+  <p class="og-prompt">{prompt}</p>
+  <button type="button" class="og-button">{actionLabel}</button>
+  <p class="og-result" aria-live="polite"></p>
+  <details class="og-mechanism">
+    <summary>How this works</summary>
+    <p>{mechanism}</p>
+  </details>
+</div>
+
+<style>
+  .oracle-generator {
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+    padding: var(--at-spacing-lg);
+    margin-block: 2rem;
+    background: var(--at-bg-alt);
+  }
+
+  .og-prompt {
+    font-weight: 600;
+    margin-block-start: 0;
+  }
+
+  .og-button {
+    font: inherit;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--at-primary);
+    border-radius: var(--at-border-radius);
+    background: var(--at-primary);
+    color: var(--at-on-primary);
+    cursor: pointer;
+  }
+
+  .og-result {
+    min-height: 1.5em;
+    font-style: italic;
+    margin-block: 1rem 0.5rem;
+  }
+
+  .og-mechanism {
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+  }
+
+  .og-mechanism p {
+    margin-block-end: 0;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-oracle-generator]").forEach((container) => {
+    const button = container.querySelector<HTMLButtonElement>(".og-button");
+    const result = container.querySelector<HTMLParagraphElement>(".og-result");
+
+    let outputs: string[] = [];
+    try {
+      outputs = JSON.parse(container.dataset.outputs ?? "[]");
+    } catch {
+      outputs = [];
+    }
+
+    button?.addEventListener("click", () => {
+      if (!result || outputs.length === 0) return;
+      const pick = outputs[Math.floor(Math.random() * outputs.length)];
+      result.textContent = pick;
+    });
+  });
+</script>
