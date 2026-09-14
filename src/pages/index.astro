@@ -2,37 +2,70 @@
 import Card from "astro-theme-university/components/Card.astro";
 import CardGrid from "astro-theme-university/components/CardGrid.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
-import heroImage from "../assets/images/hero-home.avif";
 import { courseMeta } from "../course-config";
 import { sessionLabels, siteConfig } from "../site-config";
-
-// STARTER_CONTENT: replace the hero artwork and its alt text below, then
-// remove this comment.
 ---
 
 <ContentLayout
   title={`${courseMeta.code}: ${courseMeta.title}`}
   description={courseMeta.description}
-  heroImage={heroImage}
-  heroImageAlt="A lecture theatre reduced to flat gold and black shapes, rows of seats sweeping past the frame, in a two-ink risograph print"
   {...siteConfig}
 >
   <ul class="course-tags" aria-label="Course tags">
     {courseMeta.tags.map((tag) => <li>{tag}</li>)}
   </ul>
 
-  <!-- STARTER_CONTENT: replace the authored page below, then remove this comment. -->
+  <p class="core-question">
+    Every week of this course argues toward one question: <strong>When does a coincidence become
+    meaningful?</strong>
+  </p>
+
+  <section class="opening-moment">
+    <p class="moment-text" data-moment>
+      You're reading this the moment you opened it — which is the only fact this page can actually
+      confirm.
+    </p>
+    <p class="moment-caption">
+      Everything after that — what it means that you're here, today, reading this — is the rest of
+      the course.
+    </p>
+  </section>
+
   <h2>What you will do</h2>
   <p>
-    Say what a student spends their time on — the making, reading, arguing or
-    measuring that fills the weeks. Name the artefact they walk out with.
+    Every week you bring a real pattern to class — a dream, a headline, a losing streak, a
+    recommendation algorithm that seemed to read your mind — and take it apart in public. You keep
+    a running diary of coincidences you notice in your own life, build a small working "oracle" of
+    your own design, and finish by writing the most honest possible account of one moment that felt
+    like fate: what actually happened, what you told yourself happened, and how you'd tell the
+    difference next time.
   </p>
 
   <h2>Who it is for</h2>
   <p>
-    Say who this is aimed at and what they need to already know. Be specific
-    enough that someone can rule themselves in or out without emailing you.
+    Anyone who has ever thought <em>that's too weird to be a coincidence</em> and wanted to know if
+    they were right. No background in statistics, psychology or the occult is assumed — just a
+    willingness to interrogate your own best stories about yourself. Comfort with first-year-level
+    argument and evidence is the only prerequisite.
   </p>
+
+  <h2>How the course thinks</h2>
+  <ol class="philosophy">
+    <li>
+      <strong>Seeing patterns.</strong> Why brains that evolved to spot predators in leaves now see
+      faces in toast, streaks in coin flips, and messages in static — and why that machinery
+      basically never turns off.
+    </li>
+    <li>
+      <strong>Giving patterns meaning.</strong> How the same noticed pattern becomes a private
+      superstition, a shared religion, a diagnosis, or a punchline — depending entirely on who is
+      doing the interpreting, and what they needed it to mean.
+    </li>
+    <li>
+      <strong>Deciding what to trust.</strong> A working method for the moment a pattern shows up in
+      your own life: what would make it worth acting on, and what would just make it worth noticing.
+    </li>
+  </ol>
 
   <h2>Where to go next</h2>
   <CardGrid columns={2}>
@@ -45,7 +78,36 @@ import { sessionLabels, siteConfig } from "../site-config";
     <Card title="People" href="/people/">
       <p>Who teaches the course and how to reach them.</p>
     </Card>
+    <Card title="Approach" href="/approach/">
+      <p>Why the course is built this way, and what it deliberately avoids.</p>
+    </Card>
   </CardGrid>
+
+  <script>
+    const el = document.querySelector<HTMLParagraphElement>("[data-moment]");
+    if (el) {
+      const now = new Date();
+      const time = now.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+      const day = now.toLocaleDateString(undefined, { weekday: "long" });
+
+      let visits = 1;
+      try {
+        const key = "slop3855:visits";
+        visits = Number(localStorage.getItem(key) ?? "0") + 1;
+        localStorage.setItem(key, String(visits));
+      } catch {
+        // Storage can be unavailable (private browsing, disabled cookies); the
+        // sentence still works if it just calls this visit number one.
+      }
+
+      const visitClause =
+        visits <= 1
+          ? "the first time this browser has opened it"
+          : `visit number ${visits} from this browser`;
+
+      el.textContent = `You opened this page at ${time} on a ${day} — ${visitClause}.`;
+    }
+  </script>
 </ContentLayout>
 
 <style>
@@ -64,5 +126,41 @@ import { sessionLabels, siteConfig } from "../site-config";
     color: var(--at-text-secondary);
     background: var(--at-bg-alt);
     font-size: 0.9rem;
+  }
+
+  .core-question {
+    font-size: var(--at-font-size-h3);
+    line-height: var(--at-line-height-heading);
+    margin-block-end: 2rem;
+  }
+
+  .opening-moment {
+    padding: var(--at-spacing-lg);
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+    background: var(--at-bg-alt);
+    margin-block-end: 2rem;
+  }
+
+  .moment-text {
+    font-size: var(--at-font-size-h4);
+    margin-block-end: 0.5rem;
+  }
+
+  .moment-caption {
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+    margin-block-end: 0;
+  }
+
+  .philosophy {
+    display: grid;
+    gap: 1rem;
+    padding-inline-start: 1.25rem;
+  }
+
+  .philosophy li::marker {
+    color: var(--at-heading);
+    font-weight: 600;
   }
 </style>
