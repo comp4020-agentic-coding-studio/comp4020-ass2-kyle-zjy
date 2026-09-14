@@ -2,6 +2,7 @@
 import Card from "astro-theme-university/components/Card.astro";
 import CardGrid from "astro-theme-university/components/CardGrid.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import Marginalia from "../components/Marginalia.astro";
 import { courseMeta } from "../course-config";
 import { sessionLabels, siteConfig } from "../site-config";
 ---
@@ -31,7 +32,19 @@ import { sessionLabels, siteConfig } from "../site-config";
     </p>
   </section>
 
-  <h2>What you will do</h2>
+  <section class="coincidence-check">
+    <p class="cc-prompt">Coincidence?</p>
+    <div class="cc-options" role="group" aria-label="Answer, then keep reading">
+      <button type="button" class="cc-option" data-scroll-target="#what-you-will-do">Obviously.</button>
+      <button type="button" class="cc-option" data-scroll-target="#what-you-will-do">Probably.</button>
+      <button type="button" class="cc-option" data-scroll-target="#what-you-will-do">Maybe not.</button>
+      <button type="button" class="cc-option" data-scroll-target="#what-you-will-do">
+        Ask me again in twelve weeks.
+      </button>
+    </div>
+  </section>
+
+  <h2 id="what-you-will-do">What you will do</h2>
   <p>
     Every week you bring a real pattern to class — a dream, a headline, a losing streak, a
     recommendation algorithm that seemed to read your mind — and take it apart in public. You keep
@@ -50,6 +63,7 @@ import { sessionLabels, siteConfig } from "../site-config";
   </p>
 
   <h2>How the course thinks</h2>
+  <Marginalia>Twelve weeks, twelve case files. The numbering is not decorative.</Marginalia>
   <ol class="philosophy">
     <li>
       <strong>Seeing patterns.</strong> Why brains that evolved to spot predators in leaves now see
@@ -107,6 +121,20 @@ import { sessionLabels, siteConfig } from "../site-config";
 
       el.textContent = `You opened this page at ${time} on a ${day} — ${visitClause}.`;
     }
+
+    // Every answer leads to the same place — the point is the noticing, not
+    // which button gets pressed. No answer is scored or stored.
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.querySelectorAll<HTMLButtonElement>("[data-scroll-target]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetSelector = button.dataset.scrollTarget;
+        const target = targetSelector ? document.querySelector<HTMLElement>(targetSelector) : null;
+        if (!target) return;
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        target.classList.add("just-scrolled-to");
+        window.setTimeout(() => target.classList.remove("just-scrolled-to"), 1600);
+      });
+    });
   </script>
 </ContentLayout>
 
@@ -122,16 +150,27 @@ import { sessionLabels, siteConfig } from "../site-config";
 
   .course-tags li {
     padding: 0.25rem 0.65rem;
+    border: 1px solid var(--at-border);
     border-radius: 999px;
     color: var(--at-text-secondary);
     background: var(--at-bg-alt);
-    font-size: 0.9rem;
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
   .core-question {
+    font-family: var(--at-font-heading);
     font-size: var(--at-font-size-h3);
+    font-style: italic;
     line-height: var(--at-line-height-heading);
     margin-block-end: 2rem;
+  }
+
+  .core-question strong {
+    font-style: normal;
+    color: var(--at-heading);
   }
 
   .opening-moment {
@@ -151,6 +190,52 @@ import { sessionLabels, siteConfig } from "../site-config";
     color: var(--at-text-secondary);
     font-size: var(--at-font-size-sm);
     margin-block-end: 0;
+  }
+
+  .coincidence-check {
+    margin-block-end: 2rem;
+  }
+
+  .cc-prompt {
+    font-family: var(--at-font-heading);
+    font-size: var(--at-font-size-h4);
+    font-style: italic;
+    color: var(--at-primary);
+    margin-block-end: 0.75rem;
+  }
+
+  .cc-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .cc-option {
+    font: inherit;
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    letter-spacing: 0.02em;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--at-border);
+    border-radius: 999px;
+    background: var(--at-bg-alt);
+    color: var(--at-text);
+    cursor: pointer;
+  }
+
+  .cc-option:hover {
+    border-color: var(--at-primary);
+    color: var(--at-primary);
+  }
+
+  #what-you-will-do {
+    border-radius: var(--at-border-radius);
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow 1.4s ease;
+  }
+
+  #what-you-will-do.just-scrolled-to {
+    box-shadow: 0 0 0 3px var(--at-border);
   }
 
   .philosophy {

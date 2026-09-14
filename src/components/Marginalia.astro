@@ -1,0 +1,56 @@
+---
+// A small aside note pushed into the page's outer gutter, styled like a
+// handwritten annotation in an archive's margin — but set in the same
+// mono/serif type as everything else here, never an actual script font.
+// Used sparingly (a handful of call sites, never every page): visible only
+// once the gutter is wide enough to hold it without crowding the content
+// column; entirely absent below that, not just hidden with zero width.
+interface Props {
+  side?: "start" | "end";
+}
+
+const { side = "end" } = Astro.props;
+---
+
+<aside class="marginalia" data-side={side}>
+  <p class="marginalia-inner"><slot /></p>
+</aside>
+
+<style>
+  .marginalia {
+    display: none;
+  }
+
+  @media (min-width: 90rem) {
+    .marginalia {
+      display: block;
+      position: relative;
+      height: 0;
+    }
+
+    .marginalia-inner {
+      position: absolute;
+      top: 0;
+      width: 13rem;
+      margin: 0;
+      font-family: var(--at-font-mono);
+      font-size: var(--at-font-size-xs);
+      line-height: 1.5;
+      color: var(--at-text-secondary);
+      padding-inline-start: var(--at-spacing-sm);
+      border-inline-start: 1px dashed var(--at-divider);
+    }
+
+    .marginalia[data-side="end"] .marginalia-inner {
+      inset-inline-start: calc(100% + var(--at-content-inset));
+    }
+
+    .marginalia[data-side="start"] .marginalia-inner {
+      inset-inline-end: calc(100% + var(--at-content-inset));
+      padding-inline-start: 0;
+      padding-inline-end: var(--at-spacing-sm);
+      border-inline-start: none;
+      border-inline-end: 1px dashed var(--at-divider);
+    }
+  }
+</style>
