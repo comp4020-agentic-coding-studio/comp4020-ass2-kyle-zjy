@@ -1,11 +1,65 @@
-# Your harness
+# Harness
 
-This file is yours, and it arrives with no rules in it on purpose --- this note
-is all there is, and it goes when you write your own. The rules you hold the
-agent to are part of what gets marked, so they should be rules you decided on.
+Rules this repo's build actually followed, written down so they keep being
+followed. Not a wishlist — each one exists because a real decision needed it.
 
-Nothing about the starter is recorded here. The platform under you is fixed and
-documented in `README.md`, and the
-[course website](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/)
-publishes this deliverable's brief and spec. Read both before you plan or build;
-what the agent needs to carry from either is your call.
+## Content rules (the ones that matter most)
+
+- **Never state that a divination system has a confirmed predictive
+  mechanism.** Omens, astrology, tarot, the I Ching and numerology each get a
+  plain statement of what they mechanically are (a noticing-and-selective-
+  memory habit, a Barnum-effect personality script, a projective symbol set,
+  a genuine random draw, digit arithmetic) before any account of what they're
+  taken to be. Astrology's page is the sharpest test: it says plainly that
+  controlled studies matching astrologers to strangers by birth data alone
+  have not found accuracy above chance, and does not soften that to make the
+  topic more entertaining. `spec/course-framing.test.ts` checks each
+  divination week for its own specific hedge, not one disclaimer pasted
+  everywhere.
+- **Every interactive component discloses its own mechanism, in the same
+  place a user reads the output.** `OracleGenerator`'s "How this works"
+  `<details>` is not optional decoration — it is the component's whole
+  reason for existing over a plain random-line script. Never build an
+  activity that could be mistaken for a working supernatural power.
+- **No engagement dark patterns.** No streaks, no daily push reminders, no
+  invented urgency, no result gated behind sharing it. The homepage's visit
+  counter is the one persistent piece of state on the site, and it's
+  disclosed (Week 12) and inert if it fails (private browsing) rather than
+  degraded silently.
+- **Visual design is typographic and diagrammatic, not mystical or
+  decorative.** A course arguing that meaning gets projected onto plain
+  material shouldn't dress its own pages in the aesthetic it's studying — see
+  `/approach/`.
+
+## Technical rules
+
+- **Vanilla JS only, scoped by `data-*` attribute, never an element ID.**
+  No client framework is installed; every interactive component's `<script>`
+  queries `[data-component-name]` so more than one instance can sit on the
+  same page without colliding.
+- **Keep `activity` (and similar per-kind payloads) as a loose Zod schema:**
+  require only the fields every kind shares (`kind`, `prompt`) and let the
+  rest ride `.loose()`. A new interaction kind should only ever touch its
+  own component and the one content file that uses it, never the shared
+  schema.
+- **A schema change and the content that depends on it land in the same
+  commit; unrelated content changes don't.** Content commits are grouped by
+  what they're evidence of (a whole week's lectures, the four assessments,
+  the six workshops), not by file-save order.
+- **`pnpm check` must pass before a commit, not just before a report.** Run
+  it after any schema, frontmatter, or route change — a broken `related:`
+  reference, an unquoted YAML colon, or a heading-order slip is far cheaper
+  to find immediately than after twelve more files repeat the same mistake.
+- **Every custom `spec/*.test.ts` asserts a contract, not an implementation
+  detail**, and reads it from `dist/api/**/*.json` or rendered HTML rather
+  than importing source content — so a test keeps working if the content is
+  rewritten, and fails for the right reason if the contract is actually
+  broken.
+
+## Process rules
+
+- **`PROCESS.md` is written once real commit history exists to cite, not
+  before.** Its citations are real SHAs, checked mechanically by
+  `pnpm check:evidence` — never invent a citation for a commit that doesn't
+  exist, and never backdate the account to describe a tidier sequence of
+  events than what the log actually shows.
