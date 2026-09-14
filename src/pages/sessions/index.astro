@@ -6,13 +6,14 @@ import { sessionLabels, siteConfig } from "../../site-config";
 
 <ContentLayout
   title={sessionLabels.plural}
-  description={`The twelve-week teaching schedule: what happens in each ${sessionLabels.singular.toLowerCase()}, what to prepare, and what leaves the room.`}
+  description={`Six working sessions, each tied to a specific assessment milestone rather than to every lecture week — where you practise making, breaking and pressure-testing an interpretation by hand before you're marked on one.`}
   {...siteConfig}
 >
   <p>
-    The internal collection and URL stay <code>sessions</code>. Set the visible
-    singular and plural names once in <code>src/site-config.ts</code> and use
-    the language your course deserves everywhere readers see it.
+    A lecture argues a week's case; a {sessionLabels.singular.toLowerCase()} is where you do
+    something with it — start the diary, workshop a method, review a peer's draft, build or
+    playtest a small oracle, or plan the final project. Each one names the assessment it feeds and
+    what to bring.
   </p>
   <SessionsGrid />
 </ContentLayout>
