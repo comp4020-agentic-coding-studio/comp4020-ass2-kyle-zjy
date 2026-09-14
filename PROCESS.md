@@ -71,6 +71,42 @@ earlier commit had missed
 was written last, from the rules this run actually needed, not drafted in
 advance of needing them.
 
+## The visual redesign
+
+The platform's default look was `astro-theme-slop`'s stock bright-orange
+template — generic, and not doing any work for a course whose whole subject
+is how meaning gets read into plain material. A later pass restyled the site
+into an "archive of unexplained patterns" identity — a gold/navy palette
+checked by hand against WCAG AA in both its light and dark modes, a serif
+for headings, a diagrammatic `hr` and background atmosphere, and case-file
+framing for lecture, session and assessment listings — without touching a
+route, a schema, or any text the existing `spec/*.test.ts` files assert on.
+Tokens, typography and the background came first
+([`cf7e69d`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-kyle-zjy/commit/cf7e69df085c1d4b9b33789de6726cda8961a5ef)),
+because nearly everything else in `astro-theme-university`'s CSS derives
+from those few custom properties. Lecture detail pages and the three
+interactive activity components came next, gaining an optional kicker label
+("Experiment 05", "Oracle 08") derived from data already on the page, not a
+schema change
+([`f397ffb`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-kyle-zjy/commit/f397ffb775c747f53875cb43fe9b7139dc81f0c3)).
+The lecture, session and assessment listings picked up the same catalogue
+framing
+([`2c5e70d`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-kyle-zjy/commit/2c5e70d0a477dd8c980d1ff09aa330b96a6acedf)),
+then the homepage, which also gained an always-visible, JS-enhanced
+"Coincidence?" section rather than anything gated behind script
+([`18c15f0`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-kyle-zjy/commit/18c15f0dd1fc1fbd0bab6386e09caa42142fb5c5)).
+
+Restyling the site raised a real content problem rather than just a visual
+one: Approach's existing "Why the visual design looks the way it does"
+section said the site "shouldn't dress its own pages in mystical typography,
+starfields or hand-drawn symbols," which the new background atmosphere and
+recurring mark would have made false on the page stating it. That section,
+a short addition to Week 12 naming the mark, and `CLAUDE.md`'s own
+visual-design rule were all rewritten together, on disclosure grounds rather
+than by just deleting the inconvenient sentence
+([`fecb793`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-kyle-zjy/commit/fecb79372da7cdda8ef998cf6e9af73b27465e1e)).
+`pnpm check` and `pnpm check:evidence` both stayed green throughout.
+
 ## Before you ship
 
 `pnpm check:evidence` verifies that this comment is gone, that your citations
