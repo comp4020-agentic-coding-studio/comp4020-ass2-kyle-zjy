@@ -1,12 +1,13 @@
 import { defineSiteConfig } from "astro-theme-university/types";
 import { slopBranding } from "astro-theme-slop";
-import { courseMeta } from "./course-config";
 
 // The underlying collection and URL remain `sessions`; these labels are the
-// language students see. Change them to Studios, Tutorials, Expeditions, etc.
+// language students see. Lectures argue the week's case; a Workshop is where
+// students practise making (and breaking) an interpretation by hand, so the
+// course's own touchpoints borrow the vocabulary of the systems it studies.
 export const sessionLabels = {
-  singular: "Session",
-  plural: "Sessions",
+  singular: "Workshop",
+  plural: "Workshops",
 } as const;
 
 export const graphCollections = ["sessions", "assessments", "lectures", "people"];
@@ -25,10 +26,12 @@ export const siteConfig = defineSiteConfig({
     { text: sessionLabels.plural, href: "/sessions/" },
     { text: "Assessment", href: "/assessments/" },
     { text: "People", href: "/people/" },
+    { text: "Approach", href: "/approach/" },
     { text: "Policies", href: "/policies/" },
   ],
 
   licence: "CC-BY-NC-SA-4.0",
-  socialImage: "/src/assets/images/card.png",
-  socialImageAlt: `A preview card for ${courseMeta.code}: ${courseMeta.title}`,
+  // No card image: the site's visual identity is typographic and diagrammatic
+  // rather than photographic (see /approach/), so a link preview falls back
+  // to the theme's default treatment rather than carrying a picture.
 });
