@@ -19,6 +19,16 @@ export async function getStaticPaths() {
 
 const { assessment } = Astro.props;
 const { Content } = await render(assessment);
+
+// Same fixed slug→label lookup as AssessmentsGrid, so the index and detail
+// pages agree without a second source of truth.
+const CATALOGUE_LABEL: Record<string, string> = {
+  "pattern-diary": "Field log 01",
+  "meaning-autopsy": "Autopsy report 02",
+  "build-an-oracle": "Apparatus 03",
+  "final-project": "Case closure 04",
+};
+const catalogueLabel = CATALOGUE_LABEL[assessment.id];
 ---
 
 <ContentLayout
@@ -26,6 +36,7 @@ const { Content } = await render(assessment);
   description={assessment.data.description}
   {...siteConfig}
 >
+  {catalogueLabel && <p class="activity-label">{catalogueLabel}</p>}
   {
     assessment.data.draft && (
       <Callout type="warning">

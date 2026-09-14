@@ -6,12 +6,23 @@ import { formatCourseDate } from "../lib/dates";
 
 const assessments = await getPublishedCollection("assessments");
 const visible = assessments.sort((a, b) => a.data.week - b.data.week);
+
+// A fixed catalogue label per assessment slug — there are only ever these
+// four, so a lookup is simpler than deriving one from the schema. The
+// official title stays the visible heading; this is a kicker above it.
+const CATALOGUE_LABEL: Record<string, string> = {
+  "pattern-diary": "Field log 01",
+  "meaning-autopsy": "Autopsy report 02",
+  "build-an-oracle": "Apparatus 03",
+  "final-project": "Case closure 04",
+};
 ---
 
 <CardGrid columns={2}>
   {
     visible.map((assessment) => (
       <Card headingLevel="h2" title={assessment.data.title} href={`/assessments/${assessment.id}/`}>
+        {CATALOGUE_LABEL[assessment.id] && <p class="activity-label">{CATALOGUE_LABEL[assessment.id]}</p>}
         {assessment.data.description && <p>{assessment.data.description}</p>}
         {assessment.data.weight != null && (
           <p>

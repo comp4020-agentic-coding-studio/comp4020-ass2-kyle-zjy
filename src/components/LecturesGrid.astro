@@ -12,9 +12,21 @@ const visible = lectures.sort((a, b) => a.data.date.getTime() - b.data.date.getT
   {
     visible.map((lecture) => (
       <Card headingLevel="h2" title={lecture.data.title} href={`/lectures/${lecture.id}/`}>
+        <p class="activity-label">
+          Week {String(lecture.data.week).padStart(2, "0")} · {formatCourseDate(lecture.data.date)}
+        </p>
         {lecture.data.description && <p>{lecture.data.description}</p>}
-        <p><small>Week {lecture.data.week} · {formatCourseDate(lecture.data.date)}</small></p>
+        {lecture.data.question && <p class="lg-question">{lecture.data.question}</p>}
       </Card>
     ))
   }
 </CardGrid>
+
+<style>
+  .lg-question {
+    font-family: var(--at-font-heading);
+    font-style: italic;
+    color: var(--at-text-secondary);
+    margin-block-end: 0;
+  }
+</style>

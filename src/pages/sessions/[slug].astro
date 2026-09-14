@@ -22,7 +22,8 @@ const { Content } = await render(session);
   description={session.data.description}
   {...siteConfig}
 >
-  <p><strong>{formatCourseDate(session.data.date)}</strong></p>
+  <p class="activity-label">Field session</p>
+  <p class="session-date"><strong>{formatCourseDate(session.data.date)}</strong></p>
   <Content />
   <SpecList spec={session.data.spec}>
     What you bring to the session. Written so a reader can tell whether it has
@@ -31,3 +32,14 @@ const { Content } = await render(session);
   <TeachingTeam teachers={session.data.teachers} />
   <RelatedContent entry={session} collections={graphCollections} />
 </ContentLayout>
+
+<style>
+  .session-date strong {
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--at-text-secondary);
+    font-weight: 400;
+  }
+</style>
