@@ -6,12 +6,14 @@
 interface Props {
   prompt: string;
   choices: { label: string; response: string }[];
+  label?: string;
 }
 
-const { prompt, choices } = Astro.props;
+const { prompt, choices, label } = Astro.props;
 ---
 
 <div class="interpret-choice" data-interpret-choice>
+  {label && <p class="activity-label">{label}</p>}
   <p class="ic-prompt">{prompt}</p>
   <div class="ic-choices">
     {

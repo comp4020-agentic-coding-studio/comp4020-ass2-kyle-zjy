@@ -7,12 +7,14 @@ interface Props {
   prompt: string;
   options: string[];
   reveal: string;
+  label?: string;
 }
 
-const { prompt, options, reveal } = Astro.props;
+const { prompt, options, reveal, label } = Astro.props;
 ---
 
 <div class="perception-check" data-perception-check>
+  {label && <p class="activity-label">{label}</p>}
   <p class="pc-prompt">{prompt}</p>
   <div class="pc-options" role="group" aria-label="Choose one, then read what was going on">
     {

@@ -1,7 +1,7 @@
 ---
 // A small archival marginalia motif. The course's fixed provisioning suffix
 // (courseMeta.code's last three digits) becomes a running "case file" number
-// rather than an arbitrary identifier nobody explains — see /pattern-archive/
+// rather than an arbitrary identifier nobody explains — see /approach/
 // for the full story of why.
 import { courseMeta } from "../course-config";
 
@@ -30,6 +30,7 @@ const number = typeof n === "number" ? String(n).padStart(2, "0") : n;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--at-text-secondary);
+    background: var(--at-bg-elevated);
     border: 1px solid var(--at-border);
     border-radius: var(--at-border-radius);
     padding: 0.15rem 0.55rem;
@@ -38,7 +39,7 @@ const number = typeof n === "number" ? String(n).padStart(2, "0") : n;
   }
 
   .cs-number {
-    color: var(--at-heading);
+    color: var(--at-primary);
     font-weight: 600;
   }
 </style>

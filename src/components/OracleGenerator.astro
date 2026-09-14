@@ -8,12 +8,14 @@ interface Props {
   actionLabel?: string;
   outputs: string[];
   mechanism: string;
+  label?: string;
 }
 
-const { prompt, actionLabel = "Consult it", outputs, mechanism } = Astro.props;
+const { prompt, actionLabel = "Consult it", outputs, mechanism, label } = Astro.props;
 ---
 
 <div class="oracle-generator" data-oracle-generator data-outputs={JSON.stringify(outputs)}>
+  {label && <p class="activity-label">{label}</p>}
   <p class="og-prompt">{prompt}</p>
   <button type="button" class="og-button">{actionLabel}</button>
   <p class="og-result" aria-live="polite"></p>
@@ -38,7 +40,10 @@ const { prompt, actionLabel = "Consult it", outputs, mechanism } = Astro.props;
   }
 
   .og-button {
-    font: inherit;
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     padding: 0.5rem 1.1rem;
     border: 1px solid var(--at-primary);
     border-radius: var(--at-border-radius);
@@ -47,15 +52,35 @@ const { prompt, actionLabel = "Consult it", outputs, mechanism } = Astro.props;
     cursor: pointer;
   }
 
+  .og-button::before {
+    content: "[ ";
+  }
+
+  .og-button::after {
+    content: " ]";
+  }
+
   .og-result {
     min-height: 1.5em;
-    font-style: italic;
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    text-align: center;
+    padding-block: var(--at-spacing-sm);
     margin-block: 1rem 0.5rem;
+    border-block: 1px dashed var(--at-divider);
   }
 
   .og-mechanism {
     color: var(--at-text-secondary);
     font-size: var(--at-font-size-sm);
+  }
+
+  .og-mechanism summary {
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-xs);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
   }
 
   .og-mechanism p {

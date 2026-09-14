@@ -29,6 +29,19 @@ type Activity =
   | { kind: "interpret"; prompt: string; choices: { label: string; response: string }[] }
   | { kind: "oracle"; prompt: string; actionLabel?: string; outputs: string[]; mechanism: string };
 const activity = lecture.data.activity as Activity | undefined;
+
+// A shared week number feeds both the case stamp and each activity's kicker
+// label, so "CASE 05" and "EXPERIMENT 05" always agree without a second
+// source of truth.
+const weekPadded = String(lecture.data.week).padStart(2, "0");
+const activityLabel =
+  activity?.kind === "perception"
+    ? `Experiment ${weekPadded}`
+    : activity?.kind === "interpret"
+      ? `Interpretation test ${weekPadded}`
+      : activity?.kind === "oracle"
+        ? `Oracle ${weekPadded}`
+        : undefined;
 ---
 
 <ContentLayout title={title} description={lecture.data.description} {...siteConfig}>
@@ -41,12 +54,17 @@ const activity = lecture.data.activity as Activity | undefined;
   <Content />
   {
     activity?.kind === "perception" && (
-      <PerceptionCheck prompt={activity.prompt} options={activity.options} reveal={activity.reveal} />
+      <PerceptionCheck
+        prompt={activity.prompt}
+        options={activity.options}
+        reveal={activity.reveal}
+        label={activityLabel}
+      />
     )
   }
   {
     activity?.kind === "interpret" && (
-      <InterpretChoice prompt={activity.prompt} choices={activity.choices} />
+      <InterpretChoice prompt={activity.prompt} choices={activity.choices} label={activityLabel} />
     )
   }
   {
@@ -56,6 +74,7 @@ const activity = lecture.data.activity as Activity | undefined;
         actionLabel={activity.actionLabel}
         outputs={activity.outputs}
         mechanism={activity.mechanism}
+        label={activityLabel}
       />
     )
   }
@@ -71,7 +90,17 @@ const activity = lecture.data.activity as Activity | undefined;
     flex-wrap: wrap;
   }
 
+  .lecture-meta strong {
+    font-family: var(--at-font-mono);
+    font-size: var(--at-font-size-sm);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--at-text-secondary);
+    font-weight: 400;
+  }
+
   .lecture-question {
+    font-family: var(--at-font-heading);
     font-size: var(--at-font-size-h4);
     font-style: italic;
     color: var(--at-heading);
