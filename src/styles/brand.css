@@ -1,0 +1,208 @@
+/*
+ * Brand stylesheet for SLOP3855 — "an archive of unexplained patterns."
+ *
+ * Loaded as `brandCss` (see astro.config.ts), which astro-theme-university
+ * injects unlayered, so every rule here beats the theme's own
+ * `@layer at.tokens` / `at.base` / `at.components` regardless of selector
+ * specificity. That's the theme's own documented re-skin mechanism — this
+ * file only needs to redeclare the tokens whose *value*, not just their
+ * hue, has to change (backgrounds/text/borders), because everything else
+ * (`--at-heading`, `--at-link`, `--at-accent`, `--at-on-primary`, button
+ * fills, callout tints…) is derived from `--at-primary` via relative-color
+ * syntax in tokens.css and re-derives automatically.
+ *
+ * Dark is the flagship mode; light ("daylight archive") is a genuine
+ * companion palette, not a leftover default, since the theme's toggle
+ * (footer button + prefers-color-scheme) makes both reachable at any time.
+ * `--at-primary` itself is shifted darker in light mode — same hue family,
+ * lower lightness — because headings read straight off `--at-primary`
+ * (`--at-heading: var(--at-primary)`) and the bright dark-mode gold fails
+ * AA against a pale parchment background; the bright gold is reserved for
+ * where the background is actually dark.
+ */
+
+:root {
+  /* Brand palette. Secondary (oxblood) is intentionally never consumed by
+     any derived text/UI token below — it measures under WCAG AA against
+     every dark surface here, so it's used only decoratively further down
+     (thin rules, small marks), never for text or essential UI state. */
+  --at-primary: light-dark(#7a5a1f, #c5a45d);
+  --at-secondary: #8e4943;
+  --at-black: #030303;
+  --at-white: #fdfcf8;
+
+  /* Surfaces and text — literal, not hue-derived, because the background
+     needs a navy/parchment hue independent of the gold accent hue. */
+  --at-bg: light-dark(#f4eee1, #0b0d12);
+  --at-bg-alt: light-dark(#efe6d3, #10131a);
+  --at-bg-elevated: light-dark(#fffbf2, #151922);
+  --at-text: light-dark(#241f1a, #ece7dc);
+  --at-text-secondary: light-dark(#5b5347, #a9a59b);
+  --at-text-muted: light-dark(rgb(91 83 71 / 65%), rgb(169 165 155 / 65%));
+  --at-border: light-dark(rgb(142 106 42 / 28%), rgb(197 164 93 / 22%));
+  --at-divider: light-dark(rgb(142 106 42 / 18%), rgb(197 164 93 / 14%));
+  --at-code-bg: light-dark(#eae0c8, #1a1e27);
+
+  /* Info callouts default to a bright sky blue in dark mode — too close to
+     "neon" for this palette, so it's pinned to a muted slate instead. */
+  --at-info: light-dark(#5c7a99, #7fa6c4);
+  --at-info-soft: light-dark(rgb(92 122 153 / 10%), rgb(127 166 196 / 14%));
+
+  /* Typography */
+  --at-font-heading: var(--font-newsreader, "Newsreader"), ui-serif, Georgia, "Times New Roman", serif;
+
+  /* The one recurring mark, named for the reader in Week 12 / Approach. */
+  --brand-motif: "◇";
+}
+
+/* ---------------------------------------------------------------------- */
+/* Atmosphere: a fixed, near-invisible star-chart + coordinate grid. Pure
+   CSS, no image request, static (nothing to gate on prefers-reduced-motion
+   because nothing here moves). */
+
+body {
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image:
+    radial-gradient(circle at 12% 18%, var(--at-primary) 0, var(--at-primary) 1px, transparent 1.5px),
+    radial-gradient(circle at 78% 12%, var(--at-primary) 0, var(--at-primary) 1px, transparent 1.5px),
+    radial-gradient(circle at 62% 38%, var(--at-primary) 0, var(--at-primary) 1px, transparent 1.5px),
+    radial-gradient(circle at 8% 64%, var(--at-primary) 0, var(--at-primary) 1px, transparent 1.5px),
+    radial-gradient(circle at 45% 72%, var(--at-primary) 0, var(--at-primary) 1px, transparent 1.5px),
+    radial-gradient(circle at 90% 58%, var(--at-primary) 0, var(--at-primary) 1px, transparent 1.5px),
+    radial-gradient(circle at 30% 92%, var(--at-primary) 0, var(--at-primary) 1px, transparent 1.5px),
+    radial-gradient(circle at 82% 88%, var(--at-primary) 0, var(--at-primary) 1px, transparent 1.5px),
+    repeating-linear-gradient(0deg, var(--at-border) 0, var(--at-border) 1px, transparent 1px, transparent 140px),
+    repeating-linear-gradient(90deg, var(--at-border) 0, var(--at-border) 1px, transparent 1px, transparent 140px);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Headings take the serif; archival labels stay on the theme's existing
+   monospace registration (--at-font-mono) rather than a third family. */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.at-card-title,
+.at-nav-wordmark {
+  font-family: var(--at-font-heading);
+}
+
+h1 {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Dividers: the theme's plain <hr> becomes a diagrammatic separator —
+   "────── ◇ ──────" — instead of a flat rule. Applies sitewide with no
+   markup changes. */
+
+hr {
+  position: relative;
+  height: 1px;
+  margin-block: var(--at-spacing-2xl);
+  border: none;
+  overflow: visible;
+  background: linear-gradient(to right, transparent, var(--at-border) 15%, var(--at-border) 85%, transparent);
+}
+
+hr::after {
+  content: var(--brand-motif);
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--at-bg);
+  padding-inline: var(--at-spacing-sm);
+  color: var(--at-primary);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Navigation: dark, transparent, thin gold divider; the active link gets
+   the motif instead of a generic underline. */
+
+.at-nav {
+  background: light-dark(rgb(244 238 225 / 88%), rgb(11 13 18 / 82%));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--at-divider);
+}
+
+.at-nav-links [aria-current="page"] {
+  position: relative;
+  color: var(--at-primary);
+}
+
+.at-nav-links [aria-current="page"]::after {
+  content: var(--brand-motif);
+  margin-inline-start: 0.35em;
+  font-size: 0.7em;
+  opacity: 0.85;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Cards: thin gold-tinted borders on the elevated surface, with a quiet
+   hover shift — never glow, bounce or rotate. */
+
+.at-card {
+  background: var(--at-bg-elevated);
+  border: 1px solid var(--at-border);
+  border-radius: var(--at-border-radius);
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.at-card:hover {
+  border-color: var(--at-primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .at-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Shared archival kicker label — used by the three activity components'
+   optional `label` prop (e.g. "EXPERIMENT 04") ahead of their prompt. One
+   rule here rather than duplicating it across each component's own scoped
+   <style> block. */
+
+.activity-label {
+  display: block;
+  margin-block-end: 0.5rem;
+  font-family: var(--at-font-mono);
+  font-size: var(--at-font-size-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--at-text-secondary);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Footer: same dark archival surface as the rest of the page. */
+
+.at-footer {
+  background: var(--at-bg-alt);
+  border-top: 1px solid var(--at-divider);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}

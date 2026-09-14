@@ -1,4 +1,5 @@
-import { defineConfig } from "astro/config";
+import { fileURLToPath } from "node:url";
+import { defineConfig, fontProviders } from "astro/config";
 import courseGraph from "astro-course-university";
 import universityTheme from "astro-theme-university";
 import { astromotion, deckRemarkPlugins } from "astromotion";
@@ -17,12 +18,29 @@ export default defineConfig({
   // and what a visitor clicks in agreement --- otherwise each click costs a
   // 301 on GitHub Pages.
   trailingSlash: "always",
+  // Registered here (not via an integration) so the theme's own font
+  // registration in universityTheme() --- which dedupes by name against
+  // config.fonts --- sees this one already present and only adds its own
+  // two. Headings read this; body stays the theme's Public Sans, archival
+  // labels stay its Roboto Mono --- no third family beyond this one.
+  fonts: [
+    {
+      name: "Newsreader",
+      cssVariable: "--font-newsreader",
+      provider: fontProviders.google(),
+      weights: ["400", "500", "600"] as [string, ...string[]],
+      styles: ["normal", "italic"] as ["normal", ...("normal" | "italic" | "oblique")[]],
+    },
+  ],
   integrations: [
     universityTheme({
       defaultLayout: "src/layouts/PageLayout.astro",
-      // The whole brand choice: three colour tokens and a set of lockups. Keep
-      // institutional brand packages and assets out of this fictional site.
-      brandCss: "astro-theme-slop/slop.css",
+      // The whole brand choice: a set of token overrides in one project-local
+      // stylesheet. Keep institutional brand packages and assets out of this
+      // fictional site. brandCss is injected as a bare `import` specifier
+      // with no file context of its own, so it needs an absolute path
+      // rather than one relative to this config file.
+      brandCss: fileURLToPath(new URL("./src/styles/brand.css", import.meta.url)),
       imageFormat: "avif",
       llmsTxt: true,
       // The theme owns the markdown plugin chain, so astromotion's slide
