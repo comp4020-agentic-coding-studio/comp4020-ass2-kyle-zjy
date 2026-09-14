@@ -26,10 +26,15 @@ followed. Not a wishlist — each one exists because a real decision needed it.
   counter is the one persistent piece of state on the site, and it's
   disclosed (Week 12) and inert if it fails (private browsing) rather than
   degraded silently.
-- **Visual design is typographic and diagrammatic, not mystical or
-  decorative.** A course arguing that meaning gets projected onto plain
-  material shouldn't dress its own pages in the aesthetic it's studying — see
-  `/approach/`.
+- **Visual design is archival and diagrammatic, never mystical iconography,
+  and never a symbol the site itself doesn't name.** The dot-grid atmosphere,
+  the case-file numbering and the recurring ◇ mark are dressing the site as
+  a place where a pattern gets filed and dated, not revered — no glow, no
+  crystal, no zodiac symbol, nothing that asks to be read as a working sign.
+  Any recurring mark gets named and explained on the site itself (Week 12,
+  `/approach/`) rather than left for a visitor to wonder about indefinitely —
+  the same disclosure rule the interactive components follow, applied to the
+  whole site.
 
 ## Technical rules
 

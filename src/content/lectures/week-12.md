@@ -67,6 +67,17 @@ trick doesn't make the sentence stop working. That gap — between explaining a
 pattern and still feeling it — is the honest answer to the course's opening
 question, and it's what the final project asks you to write about directly.
 
+While you're looking: the small ◇ that has marked every divider on this site
+since week 1 — between sections, after the active page in the navigation, on
+the oracle's draw button — has never been explained until this sentence. It
+is not a symbol for anything. It was chosen because it is the same mark used
+in this course's own diagrams, and repeating one plain, undecorated shape
+across a whole term is exactly the kind of pattern this course spends twelve
+weeks teaching you to notice in things that aren't marks on a website —
+before you know whether it means anything, before anyone tells you why it's
+there. [The approach page](/approach/) says more about why it went unnamed
+this long.
+
 ## Try it
 
 Reread the homepage sentence with this week's vocabulary before you answer.
