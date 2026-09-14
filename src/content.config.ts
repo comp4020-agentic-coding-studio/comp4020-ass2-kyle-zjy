@@ -8,6 +8,17 @@ const courseNodeLoader = (dir: string) =>
   glob({ pattern: ["**/*.{md,mdx}", "!**/CLAUDE.md"], base: `src/content/${dir}` });
 const teacherRefs = z.array(reference("people")).min(1);
 
+// A lecture's embedded interactive moment. `kind` picks which component the
+// lecture route renders; the rest of the bag is kind-specific and passed
+// through untyped, so a new interaction only ever touches the component and
+// the one week that uses it, never this schema.
+const activitySchema = z
+  .object({
+    kind: z.enum(["interpret", "oracle", "perception"]),
+    prompt: z.string().trim().min(1),
+  })
+  .loose();
+
 const weightedMarking = z
   .object({
     mode: z.literal("weighted"),
@@ -62,6 +73,11 @@ export const collections = {
         week: weekSchema,
         date: z.coerce.date(),
         teachers: teacherRefs.optional(),
+        // Every teaching week argues towards the course's one open question,
+        // so the schema — not just convention — requires each lecture to
+        // name the question it's answering this week.
+        question: z.string().trim().min(1),
+        activity: activitySchema.optional(),
         slides: z
           .string()
           .regex(/^\/decks\/[a-z0-9-]+\/$/)

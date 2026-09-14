@@ -40,23 +40,25 @@ export const slopCourseMetaSchema = z
 
 // The single source of truth for the course record. The generated homepage,
 // navigation label and /api/index.json all read this object.
-// Replace every placeholder value, but keep the shape: the catalogue ingests
-// this API contract when the course is published.
 //
-// The code's last three digits were assigned to this repo when it was
-// provisioned, and no other course in the cohort has them. Change the first
-// digit to your course's level (and `level` to match); keep the other three.
-// STARTER_CONTENT: replace this course record, then remove this comment.
+// 855 is the fixed suffix this repo was provisioned with; 3 is this course's
+// chosen level (advanced undergraduate — the course assumes no prerequisite
+// beyond first-year comfort with an argument, not a discipline). The teaching
+// period below runs 2027-07-26 to 2027-10-18 (twelve Monday-dated weeks, with
+// a one-week mid-semester break after week 6); endDate is set past the final
+// project's due date so every dated node in the site stays inside it.
 export const courseMeta = slopCourseMetaSchema.parse({
-  code: "SLOP1855",
-  title: "Course Title Goes Here",
-  session: "Semester 1",
+  code: "SLOP3855",
+  title: "Coincidence, Fate and Other Suspicious Patterns",
+  session: "Semester 2",
   year: 2027,
-  level: 1,
-  startDate: "2027-02-22",
-  endDate: "2027-05-28",
+  level: 3,
+  startDate: "2027-07-26",
+  endDate: "2027-11-05",
   description:
-    "One concise paragraph explaining what this course is, who it is for, " +
-    "and why somebody would choose to spend a semester taking it.",
-  tags: ["replace me"],
+    "Humans are extraordinarily good at finding patterns — in dreams, cards, " +
+    "stars and data. This course studies the territory between coincidence " +
+    "and meaning, and what happens when a pattern starts to feel like it " +
+    "was meant to happen.",
+  tags: ["psychology", "philosophy", "media studies"],
 }) satisfies CourseMetaInput;
